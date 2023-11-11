@@ -43,8 +43,8 @@ function createRow(user, index) {
              <td>${user.age}</td>
              <td>${user.email}</td>                  
              <td>
-                  <span class="delete">delete</span>
-                  <span class="update">update</span>
+                  <span id="user-delete-${user.id}" class="delete">delete</span>
+                  <span id="user-uptate-${user.id}" class="update">update</span>
              </td>
       </tr>
    `;
@@ -62,7 +62,6 @@ function createAndSave() {
         data = JSON.parse(dataLocalStorage);
     }
 
-    
     let user = {};
     user.id = Date.now();
     user.name = name.value;
@@ -90,4 +89,25 @@ window.onload = function () {
             createRow(user, index);
         });
     }       
+
+    let deleteButtons = document.querySelectorAll('span.delete');
+    if (deleteButtons.length) {
+        deleteButtons.forEach(item => {
+            item.addEventListener('click', function () {
+                let confirmDelete = confirm("O'chirishi istaysizmi");
+
+                if (confirmDelete) {
+                    let userId = item.id.substring(12);
+
+                    data = date.filter(el => {
+                        return el.id != userId;
+                    });
+
+                    localStorage.setItem('users', JSON.stringify(data));
+                    window.location.reload();
+
+                }
+            })
+        })
+    }
 };
